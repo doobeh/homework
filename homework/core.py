@@ -1,8 +1,9 @@
+from werkzeug.utils import find_modules, import_string
 from flask import Flask
 from .database import db
 from flask_bootstrap import Bootstrap
 import os
-
+from homework.cli import core_cli
 
 def create_app(config=None):
     # create and configure the app
@@ -21,10 +22,23 @@ def create_app(config=None):
 
     register_database(app)
     Bootstrap(app)
-
+    register_blueprints(app)
+    app.cli.add_command(core_cli)
     return app
 
 
 def register_database(app):
     db.init_app(app)
     return None
+
+
+def register_blueprints(app):
+    """Register all blueprint modules
+    Reference: Armin Ronacher, "Flask for Fun and for Profit" PyBay 2016.
+    """
+    for name in find_modules("homework.blueprints"):
+        mod = import_string(name)
+        if hasattr(mod, "bp"):
+            app.register_blueprint(mod.bp)
+    return None
+

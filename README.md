@@ -34,15 +34,8 @@ accepts a BasicAuth user/password-- returns a json dict:
 }
  ```
  
- A bad authentication token will return a http code 401 and JSON
-response:
-
-```json
-{
-    "status": "bad_token",
-    "message": "Bad Token, expired or incorrect",  
-}
-```
+ A bad authentication token or auth will return a http code 401.
+ Tokens can't be requested for other tokens (401 error).
 
  ### Image Uploads
 
