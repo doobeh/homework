@@ -1,8 +1,9 @@
 flask
 flask-sqlalchemy
-flask-bootstrap
 flask_httpauth
 black
 pytest
 requests
 python-dateutil
+itsdangerous
+werkzeug

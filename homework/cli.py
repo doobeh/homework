@@ -7,6 +7,7 @@ import click
 
 core_cli = AppGroup("core")
 
+
 @core_cli.command("init")
 def app_init():
     if not os.path.exists(current_app.instance_path):

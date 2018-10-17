@@ -5,11 +5,12 @@ from flask_bootstrap import Bootstrap
 import os
 from homework.cli import core_cli
 
+
 def create_app(config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
-    default_sqlite_uri = os.path.join(app.instance_path, 'project.sqlite3')
+    default_sqlite_uri = os.path.join(app.instance_path, "project.sqlite3")
     app.config.from_mapping(
         SECRET_KEY="default",
         SQLALCHEMY_DATABASE_URI=f"sqlite:///{default_sqlite_uri}",
@@ -41,4 +42,3 @@ def register_blueprints(app):
         if hasattr(mod, "bp"):
             app.register_blueprint(mod.bp)
     return None
-
