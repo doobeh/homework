@@ -1,7 +1,6 @@
 from werkzeug.utils import find_modules, import_string
 from flask import Flask
 from .database import db
-from flask_bootstrap import Bootstrap
 import os
 from homework.cli import core_cli
 
@@ -22,7 +21,6 @@ def create_app(config=None):
         app.config.from_pyfile(config)
 
     register_database(app)
-    Bootstrap(app)
     register_blueprints(app)
     app.cli.add_command(core_cli)
     return app
