@@ -9,7 +9,7 @@ The purpose is to be able to spin up this service, and set a challenge
 to a third-party to be able to create a client (in any language) 
 that can successfully communicate and populate the service with data.
 
-So, we're aiming to test:
+The service covers:
 
 - Authentication that returns a temporary token, which can then be
   used to authenticate future requests with a 10 minute lifetime.
