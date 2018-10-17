@@ -12,11 +12,26 @@ that can successfully communicate and populate the service with data.
 So, we're aiming to test:
 
 - Authentication that returns a temporary token, which can then be
-  used to authenticate future requests for say, 10 minutes.
+  used to authenticate future requests with a 10 minute lifetime.
 - Handle POST'd json data to API endpoints.
 - Image/Binary uploads to API endpoints.
-- JSON responses to all requests.
-- Basic UI, because, why not-- enables simple testing.
+- JSON responses to requests.
+- Basic UI, because, why not-- enables simple checks.
+
+And the general goal is to build a client that can talk with this
+service, to supply it with the correct data.
+
+The steps would generally be:
+
+1. Request an authentication token
+2. Upload an image, get reference
+3. Upload meta-data with image reference
+
+When sending a second image, the client should just start from step 2
+and use the currently active token. If the token expires and the client
+gets a 401 - bad_token, only then should the client request a new 
+token and resubmit.
+
 
 ## Endpoints
 
@@ -34,8 +49,16 @@ accepts a BasicAuth user/password-- returns a json dict:
 }
  ```
  
+ example curl request:
+ 
+    curl --user email@example.com:secretpassword homework.example.com/api/v1/auth
+ 
+ 
  A bad authentication token or auth will return a http code 401.
  Tokens can't be requested for other tokens (401 error).
+ 
+ The token can now be used in place of the user in a BasicAuth request
+ (The password can be anything, as it's discarded)
 
  ### Image Uploads
 
@@ -67,6 +90,10 @@ Failures on uploads cause a 400 status code, with following JSON payload:
 }
 ```
 
+example curl command:
+
+    curl --user current_token:none -F "image=@sea.jpg" homework.example.com/api/v1/image
+
 ### MetaData Submission
 
 ```/api/v1/meta```
@@ -86,6 +113,7 @@ Accepts a JSON dict of the following fields:
 - `reference` is an integer stored from the upload process.
 
 Bad reference on meta data uploads cause a http code 400 with following payload:
+
 ```json
 {
     "status": "bad_reference",
@@ -101,9 +129,7 @@ Other bad meta-data error (http code 400) with payload:
 }
 ```
 
-
 ### Reading Entries
-
 
 ```/api/v1/entries```
 
@@ -131,15 +157,3 @@ to allow the client to render a UI of results.
 }
 
 ```
-
-## Notes
-
-So a successful client's goal it to:
-
-1. Request an authentication token
-2. Upload an image, get reference
-3. Upload meta-data with image reference
-
-On subsequent uploads, the client should just start from step 2
-and use the active token, if the token expires and the client
-gets a 401 - bad_token, only then request a new token.
