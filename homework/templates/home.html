@@ -44,7 +44,7 @@
     {% block content %}
           {% for image in images %}
         <div class="media">
-          <img class="mr-3" src="images/{{ image.path }}" width="100px" alt="image.meta.description">
+          <img class="mr-3" src="images/{{ image.path }}" width="25%" alt="image.meta.description">
           <div class="media-body">
             <h5 class="mt-0">{{ image.id }}: {{ image.user.email }}</h5>
               <a href="{{ image.metadata.url }}">{{ image.metadata.description }}</a>
